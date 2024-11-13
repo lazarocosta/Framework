@@ -11,7 +11,7 @@
 # Endpoints Overview
 
 ## Build Docker Image
-**URL**: `/sessions/<projectUuid>/build-docker-image`  
+**URL**: `/<projectUuid>/build-docker-image`  
 **Method**: `POST`  
 **Description**: Builds a Docker image based on provided configurations and optional database configurations.  
 **Request Body**:
@@ -24,7 +24,7 @@
 ---
 
 ## Build Dockerfile
-**URL**: `/sessions/<projectUuid>/build-docker-file`  
+**URL**: `/<projectUuid>/build-docker-file`  
 **Method**: `POST`  
 **Description**: Constructs a Dockerfile based on the provided request data.  
 **Request Body**: JSON containing project UUID, programming languages, operating system, and dependencies.
@@ -34,7 +34,7 @@
 ---
 
 ## Get Configuration
-**URL**: `/sessions/<projectUuid>/get-configuration`  
+**URL**: `/<projectUuid>/get-configuration`  
 **Method**: `GET`  
 **Description**: Retrieves the saved configuration for a given project UUID.
 
@@ -43,7 +43,7 @@
 ---
 
 ## Validate Docker Image
-**URL**: `/sessions/<projectUuid>/validates-docker-image`  
+**URL**: `/<projectUuid>/validates-docker-image`  
 **Method**: `POST`  
 **Description**: Validates a Docker image with the specified Python dependencies.  
 **Request Body**:
@@ -55,7 +55,7 @@
 ---
 
 ## Run Docker Container
-**URL**: `/sessions/<projectUuid>/run-container`  
+**URL**: `/<projectUuid>/run-container`  
 **Method**: `POST`  
 **Description**: Runs a Docker container using the specified image and command. Supports running containers with database configurations.  
 **Request Body**:
@@ -68,7 +68,7 @@
 ---
 
 ## Package Research Artifact
-**URL**: `/sessions/<projectUuid>/package`  
+**URL**: `/<projectUuid>/package`  
 **Method**: `GET`  
 **Description**: Packages project files and Docker images into a zip file for research artifact purposes.  
 **Request Body**: Contains information about commands to run, Docker tag ID, and optional database configurations.

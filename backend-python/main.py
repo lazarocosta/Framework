@@ -182,7 +182,7 @@ def buildDockerFile(requestData, projectUuid, projectFiles, myProjectFolder):
     return {"path": path, "hasRequirementsFile": hasRequirementsFile}
 
 
-@app.route("/sessions/<projectUuid>/build-docker-image", methods=['POST'])
+@app.route("/<projectUuid>/build-docker-image", methods=['POST'])
 @cross_origin()
 def buildDockerImage(projectUuid):
     requestData = request.get_json()
@@ -301,7 +301,7 @@ def updateDockerFileIfNecessary(dockerfile, dockerfileName, path):
         print(f"String saved to {path}/{dockerfileName} successfully.")
 
 
-@app.route("/sessions/<projectUuid>/build-docker-file", methods=['POST'])
+@app.route("/<projectUuid>/build-docker-file", methods=['POST'])
 @cross_origin()
 def buildDockerFileMain(projectUuid):
     requestData = json.loads(request.data)
@@ -352,7 +352,7 @@ def buildDockerFileMain(projectUuid):
         return makeResponse({'message': str(e)}, 404, True)
 
 
-@app.route("/sessions/<projectUuid>/get-configuration", methods=['GET'])
+@app.route("/<projectUuid>/get-configuration", methods=['GET'])
 @cross_origin()
 def getDockerImages(projectUuid):
     try:
@@ -363,7 +363,7 @@ def getDockerImages(projectUuid):
         return makeResponse({'message': str(e)}, 404, True)
 
 
-@app.route("/sessions/<projectUuid>/validates-docker-image", methods=['POST'])
+@app.route("/<projectUuid>/validates-docker-image", methods=['POST'])
 @cross_origin()
 def validatesDockerImage(projectUuid):
     requestData = json.loads(request.data)
@@ -413,7 +413,7 @@ def validatesDockerImage(projectUuid):
         return makeResponse({'message': str(e)}, 404, True)
 
 
-@app.route("/sessions/<projectUuid>/run-container", methods=['POST'])
+@app.route("/<projectUuid>/run-container", methods=['POST'])
 @cross_origin()
 def runDockerContainer(projectUuid):
     requestData = request.get_json()['configurationForm']
@@ -609,7 +609,7 @@ def saveDockerImage(myProjectFolder, dockerImageName, dockerTagId):
     f.close()
 
 
-@app.route("/sessions/<projectUuid>/package", methods=['GET'])
+@app.route("/<projectUuid>/package", methods=['GET'])
 @cross_origin()
 def researchArtifact(projectUuid):
     requestData = json.loads(request.data)
