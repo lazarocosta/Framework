@@ -1,76 +1,145 @@
-# How To configure the Environment
-`pip install -r requirements.txt`
-
-# How To Execute
-`python ./main.py`
-
-**Running on http://127.0.0.1:5000**
+## API-REST-Python with Flask
+[Check This Guide](backend-python/README.md)
 
 
+# API-REST-Node-JS with Neo4j
 
-# Endpoints Overview
+## Prerequisites
+To run this API, ensure you have the following prerequisites set up:
 
-## Build Docker Image
-**URL**: `/sessions/<projectUuid>/build-docker-image`  
-**Method**: `POST`  
-**Description**: Builds a Docker image based on provided configurations and optional database configurations.  
-**Request Body**:
-- **configurationForm**: Includes Dockerfile, database Dockerfile, and configuration details.
-- **projectUuid**: Unique identifier for the project.
-- **DBhas**, **dbConfiguration**: Optional fields for database configuration.
+1. **Neo4j Database**: Version 4.0.0 or higher.
+   - Note: The project is designed to handle two separate connections to the Neo4j database.
+2. **Neo4j Connection Settings**:
+   - **Connection String**: `bolt://localhost:7687`
+   - **Credentials**:
+     - **User**: `neo4j`
+     - **Password**: `1234`
 
-**Response**: Returns the Docker image ID or an error message if the build fails.
+## How to Run
+1. **Install Dependencies**:
+   ```bash
+   npm install
 
----
+2. **How To Execute**:
+   ```bash
+   npm start
 
-## Build Dockerfile
-**URL**: `/sessions/<projectUuid>/build-docker-file`  
-**Method**: `POST`  
-**Description**: Constructs a Dockerfile based on the provided request data.  
-**Request Body**: JSON containing project UUID, programming languages, operating system, and dependencies.
+**Running on http://127.0.0.1:3000**
 
-**Response**: Returns the generated Dockerfile content or an error message.
 
----
+# API Documentation
 
-## Get Configuration
-**URL**: `/sessions/<projectUuid>/get-configuration`  
-**Method**: `GET`  
-**Description**: Retrieves the saved configuration for a given project UUID.
-
-**Response**: The project configuration or an error message.
-
----
-
-## Validate Docker Image
-**URL**: `/sessions/<projectUuid>/validates-docker-image`  
-**Method**: `POST`  
-**Description**: Validates a Docker image with the specified Python dependencies.  
-**Request Body**:
-- **pythondependencies**: List of Python dependencies to validate.
-- **tagId**: Tag ID of the Docker image to validate.
-
-**Response**: The new Docker image ID if successful or an error message.
+## 1. Add a Folder to a Project
+- **Endpoint**: `POST /:projectUuid/folder`
+- **Description**: Adds a new folder to the specified project.
+- **Parameters**:
+  - `projectUuid` (string, URL parameter): The UUID of the project.
+- **Request Body**:
+  - `parentDirectory` (JSON object): Information about the parent directory where the folder will be created.
+  - `folderInformation` (JSON object): Details of the folder to be created.
+- **Response**:
+  - **200 OK**: Folder successfully created.
+  - **400 Bad Request**: If the `parentDirectory` or `folderInformation` is not provided.
+  - **500 Internal Server Error**: If there is an error during the folder creation process.
 
 ---
 
-## Run Docker Container
-**URL**: `/sessions/<projectUuid>/run-container`  
-**Method**: `POST`  
-**Description**: Runs a Docker container using the specified image and command. Supports running containers with database configurations.  
-**Request Body**:
-- **command**: Command to execute within the container.
-- **tagId**: Docker image tag ID.
-- **Optional**: Configuration form details for databases.
-
-**Response**: The container logs or a message indicating that the container is running.
+## 2. Get Programming Languages Used in a Project
+- **Endpoint**: `GET /:projectUuid/programmingLanguages`
+- **Description**: Retrieves the programming languages associated with the specified project.
+- **Parameters**:
+  - `projectUuid` (string, URL parameter): The UUID of the project.
+- **Response**:
+  - **200 OK**: Returns a list of programming languages.
+  - **400 Bad Request**: If `projectUuid` is missing.
+  - **500 Internal Server Error**: If there is an error during retrieval.
 
 ---
 
-## Package Research Artifact
-**URL**: `/sessions/<projectUuid>/package`  
-**Method**: `GET`  
-**Description**: Packages project files and Docker images into a zip file for research artifact purposes.  
-**Request Body**: Contains information about commands to run, Docker tag ID, and optional database configurations.
+## 3. Get Python Files in a Project
+- **Endpoint**: `GET /:projectUuid/pythonfiles`
+- **Description**: Retrieves all Python files associated with the specified project.
+- **Parameters**:
+  - `projectUuid` (string, URL parameter): The UUID of the project.
+- **Response**:
+  - **200 OK**: Returns a list of Python files.
+  - **500 Internal Server Error**: If there is an error during retrieval.
 
-**Response**: A downloadable zip file containing all the necessary files and scripts.
+---
+
+## 4. Get Folders in a Project
+- **Endpoint**: `GET /:projectUuid/folders`
+- **Description**: Retrieves all folders associated with the specified project.
+- **Parameters**:
+  - `projectUuid` (string, URL parameter): The UUID of the project.
+- **Response**:
+  - **200 OK**: Returns a list of folders.
+  - **500 Internal Server Error**: If there is an error during retrieval.
+
+---
+
+
+## 5. Upload a File to a Project
+- **Endpoint**: `POST /:projectUuid/uploadfile`
+- **Description**: Uploads a file to the specified project.
+- **Parameters**:
+  - `projectUuid` (string, URL parameter): The UUID of the project.
+- **Request Body**:
+  - `parentDirectory` (JSON object): The directory where the file will be uploaded.
+  - `fileInformation` (JSON object): Details of the file to be uploaded.
+- **Form Data**:
+  - `file` (file): The file to be uploaded.
+- **Response**:
+  - **200 OK**: File successfully uploaded.
+  - **400 Bad Request**: If no file is provided or if required information is missing.
+  - **500 Internal Server Error**: If there is an error during file upload.
+
+---
+
+## 6. Upload a Project
+- **Endpoint**: `POST /:projectUuid/uploadproject`
+- **Description**: Uploads a project with all its associated files and folders.
+- **Parameters**:
+  - `projectUuid` (string, URL parameter): The UUID of the project.
+- **Request Body**:
+  - The project file(s) to be uploaded.
+- **Response**:
+  - **200 OK**: Project successfully uploaded.
+  - **400 Bad Request**: If no project file is provided.
+  - **500 Internal Server Error**: If there is an error during project upload.
+
+---
+
+## 7. Upload a Project from a Remote Repository
+- **Endpoint**: `POST /:projectUuid/uploadgitproject`
+- **Description**: Uploads a project from a remote repository, such as GitHub, Figshare, or Zenodo.
+- **Parameters**:
+  - `projectUuid` (string, URL parameter): The UUID of the project.
+- **Request Body**:
+  - `repositorySelected` (string): The repository type (e.g., "GitHub", "Figshare").
+  - `projectLocation` (string): The URL or DOI of the remote project.
+  - `defaultBranchName` (string, optional): The default branch name (for GitHub).
+  - `downloadAllFiles` (boolean, optional): Whether to download all files.
+  - `files` (array, optional): Specific files to download.
+- **Response**:
+  - **200 OK**: Project successfully uploaded from the remote repository.
+  - **400 Bad Request**: If required information is missing.
+  - **500 Internal Server Error**: If there is an error during upload.
+
+---
+
+## 8. Add a Folder to a Project (Alternative)
+- **Endpoint**: `POST /:projectUuid/addfolder`
+- **Description**: Another way to add a folder to the specified project.
+- **Parameters**:
+  - `projectUuid` (string, URL parameter): The UUID of the project.
+- **Request Body**:
+  - `parentDirectory` (JSON object): Information about the parent directory.
+  - `folderInformation` (JSON object): Details of the folder to be created.
+- **Response**:
+  - **200 OK**: Folder successfully created.
+  - **400 Bad Request**: If required information is missing.
+  - **500 Internal Server Error**: If there is an error during folder creation.
+
+---
+
